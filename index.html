@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" type="text/css" href="main.css">
+
+    <script src="./node_modules/web3/dist/web3.min.js"></script>
+
+</head>
+<body>
+    <div class="container">
+
+        <h1>Smart Share</h1>
+
+        <h2 id="owner"></h2>
+
+        <label for="name" class="col-lg-2 control-label">Onwer Name</label>
+        <input id="name" type="text">
+
+        <label for="name" class="col-lg-2 control-label">Shared Item</label>
+        <input id="item" type="text">
+
+        <label for="name" class="col-lg-2 control-label">Price</label>
+        <input id="price" type="text">
+
+        <button id="button">Update Owner Info</button>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+    <script>
+
+        if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+        } else {
+            // set the provider you want from Web3.providers
+            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        }
+        
+        var SharedEcoContract = web3.eth.contract([{"constant":true,"inputs":[],"name":"getOwner","outputs":[{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"name","type":"string"},{"name":"item","type":"string"},{"name":"price","type":"uint256"}],"name":"setOwner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}]);
+        web3.eth.defaultAccount = '0xae69ff88a9491929653cbbff91bc218a352303a6';
+
+        // get smart contract account/address
+        var SharedEco = SharedEcoContract.at('0xc5cba31ee1307f491e3f9388aeb44d78d26a5010');
+        
+        console.log(SharedEco);
+    
+        SharedEco.getOwner(function(error, result){
+            if(!error)
+                {
+                    $("#owner").html(result[0]+' is sharing item ['+result[1]+'] at $'+result[2]);
+                    console.log(result);
+                }
+            else
+                console.error(error);
+        });
+
+        $("#button").click(function() {
+            SharedEco.setOwner($("#name").val(), $("#item").val(), $("#price").val());
+        });
+
+    </script>
+
+</body>
+</html>
