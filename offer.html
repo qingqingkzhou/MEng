@@ -18,16 +18,19 @@
 
         <h2 id="owner"></h2>
 
-        <label for="name" class="col-lg-2 control-label">Onwer Name</label>
+        <h2 id="balance"></h2>
+
+        <label for="name" class="col-lg-2 control-label">Name</label>
         <input id="name" type="text">
 
         <label for="name" class="col-lg-2 control-label">Shared Item</label>
         <input id="item" type="text">
 
-        <label for="name" class="col-lg-2 control-label">Price</label>
+        <label for="name" class="col-lg-2 control-label">Price Offered</label>
         <input id="price" type="text">
 
-        <button id="button">Update Owner Info</button>
+        <button id="button1">Place order</button>
+        <button id="button2">Approve</button>
 
     </div>
 
@@ -44,27 +47,46 @@
         
         var SharedEcoContract = web3.eth.contract([{"constant":false,"inputs":[{"name":"name","type":"string"},{"name":"item","type":"string"},{"name":"price","type":"uint256"}],"name":"setLoaner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getOwner","outputs":[{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"owner_addr","type":"address"}],"name":"approveDeal","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getLoaner","outputs":[{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"name","type":"string"},{"name":"item","type":"string"},{"name":"price","type":"uint256"}],"name":"setOwner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}]);
 
+        function checkBalances() {
+            var totalBal = 0;
+            for (var acctNum in web3.eth.accounts) {
+                var acct = web3.eth.accounts[acctNum];
+                var acctBal = web3.fromWei(web3.eth.getBalance(acct), "ether");
+                totalBal += parseFloat(acctBal);
+                console.log("  eth.accounts[" + acctNum + "]: \t" + acct + " \tbalance: " + acctBal + " ether");
+                $("#balance").html("Account[" + acct + "]: \tbalance: " + acctBal + " ether");
+                break;
+            }
+        };
+
         // Account in 'Run' tab in the Remix IDE
         //web3.eth.defaultAccount = '0x29588377bd448a678aed751f5eb4116d6c4ac1d0';
         web3.eth.defaultAccount = web3.eth.accounts[0];
 
         // get smart contract account/address from remix
         var SharedEco = SharedEcoContract.at('0x87517ad106525e7e0d97ca5a3631bf62773fabab');
-
+        
         console.log(SharedEco);
     
-        SharedEco.getOwner(function(error, result){
+        SharedEco.getLoaner(function(error, result){
             if(!error)
                 {
-                    $("#owner").html(result[0]+' is sharing item '+result[1]+' at $'+result[2]);
+                    $("#owner").html(result[0]+' is offering $'+result[2] + ' for ' + result[1]);
                     console.log(result);
                 }
             else
                 console.error(error);
         });
 
-        $("#button").click(function() {
-            SharedEco.setOwner($("#name").val(), $("#item").val(), $("#price").val());
+        // display the balance of an account
+        checkBalances();
+
+        $("#button1").click(function() {
+            SharedEco.setLoaner($("#name").val(), $("#item").val(), $("#price").val());
+        });
+
+        $("#button2").click(function() {
+            SharedEco.approveDeal(0x29588377bd448a678aed751f5eb4116d6c4ac1d0);
         });
 
     </script>
