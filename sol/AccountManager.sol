@@ -22,11 +22,16 @@ contract AccountManager {
     mapping(uint => AccountInfo) m_owner;
     mapping(uint => AccountInfo) m_loaner;
     
-    uint index_owner = 0;
-    uint index_loaner = 0;
+    uint index_owner;
+    uint index_loaner;
     
     // seed number used to generate hash code for item
     uint256 seed = 123;
+    
+    constructor() public {
+        index_owner = 0;
+        index_loaner = 0;
+    }
     
     // used to generate hash code for item string
     function hashSeriesNumber(string memory item, uint256 number) public pure returns (bytes32) {
@@ -35,14 +40,13 @@ contract AccountManager {
 
     function setOwner(string memory _name,
                       string memory _item,
-                      uint _price,
-                      address _addr)
+                      uint _price)
                       public returns (uint) {
                           
         m_owner[index_owner].name  = _name;
         m_owner[index_owner].item  = _item;
         m_owner[index_owner].price = _price;
-        m_owner[index_owner].addr  = _addr;
+        m_owner[index_owner].addr  = msg.sender;
         m_owner[index_owner].itemhash = hashSeriesNumber(_item, seed);
         
         index_owner++;
@@ -50,12 +54,31 @@ contract AccountManager {
         return index_owner-1;
     }
    
+    function getOwnerCount() public view returns (uint) {
+        return index_owner;
+    }
+    
+    function getLoanerCount() public view returns (uint) {
+        return index_loaner;
+    }
+    
     function removeOwner(uint id) public {
        delete m_owner[id];
     }
    
-    function getOwner(uint id) public view returns (uint, string memory, string memory, uint) {
-       return (id, m_owner[id].name, m_owner[id].item, m_owner[id].price);
+    function getOwner(uint id) public view returns (
+                uint,
+                string memory,
+                address,
+                string memory,
+                uint,
+                bytes32) {
+       return (id,
+               m_owner[id].name,
+               m_owner[id].addr,
+               m_owner[id].item,
+               m_owner[id].price,
+               m_owner[id].itemhash);
     }
    
    
@@ -80,8 +103,20 @@ contract AccountManager {
        delete m_loaner[id];
     }
    
-    function getLoaner(uint id) public view returns (uint, string memory, string memory, uint) {
-       return (id, m_loaner[id].name, m_loaner[id].item, m_loaner[id].price);
+   
+    function getLoaner(uint id) public view returns (
+                uint,
+                string memory,
+                address,
+                string memory,
+                uint,
+                bytes32) {
+       return (id,
+               m_loaner[id].name,
+               m_loaner[id].addr,
+               m_loaner[id].item,
+               m_loaner[id].price,
+               m_loaner[id].itemhash);
     }
     
     function getLoanerAddr(uint id) public view returns (address) {
@@ -91,4 +126,5 @@ contract AccountManager {
     function getOwnerAddr(uint id) public view returns (address) {
        return m_owner[id].addr;
     }
+    
 }

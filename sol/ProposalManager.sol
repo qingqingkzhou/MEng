@@ -81,8 +81,8 @@ contract ProposalManager {
 
         if (!allowedRecipients[_recipient]
             //|| _debatingPeriod < minProposalDebatePeriod
-            || _debatingPeriod > 8 weeks
-            || msg.value < proposalDeposit
+            //|| _debatingPeriod > 8 weeks
+            //|| msg.value < proposalDeposit
             || msg.sender == address(this) //to prevent a 51% attacker to convert the ether into deposit
             )
                 return 255;
@@ -141,6 +141,17 @@ contract ProposalManager {
         }
     }
     
+    // vote for a proposal
+    function simpleVote(uint id, bool yesorno) public {
+        
+        // verify hash
+        if (yesorno) {
+            proposals[id].yes_count++;
+        }
+        else {
+            proposals[id].no_count++;
+        }
+    }
     
     // verify a proposal
     function verifyProposal(uint id) public returns (bool) {
@@ -195,5 +206,33 @@ contract ProposalManager {
     
     function gethash(uint id) public view returns (bytes32) {
         return proposals[id].proposalHash;        
+    }
+    
+    function getDescription(uint id) public view returns (string memory) {
+        return proposals[id].description;
+    }
+    
+    function getDeadline(uint id) public view returns (uint) {
+        return proposals[id].votingDeadline;
+    }
+    
+    function getOpen(uint id) public view returns (bool) {
+        return proposals[id].open;
+    }
+    
+    function getPassed(uint id) public view returns (bool) {
+        return proposals[id].proposalPassed;
+    }
+    
+    function getDeposit(uint id) public view returns (uint) {
+        return proposals[id].proposalDeposit;
+    }
+    
+    function getYescount(uint id) public view returns (uint) {
+        return proposals[id].yes_count;
+    }
+    
+    function getNocount(uint id) public view returns (uint) {
+        return proposals[id].no_count;
     }
 }

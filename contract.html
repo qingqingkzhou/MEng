@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" type="text/css" href="main.css">
+
+    <script src="./node_modules/web3/dist/web3.min.js"></script>
+
+</head>
+<body>
+    <div class="container">
+
+        <h1>Smart Share</h1>
+
+        <h2>Contract 1</h2>
+
+        <label for="name" class="col-lg-2 control-label">Item Owner Address</label>
+        <h4 id="owner1"></h4>
+
+        <label for="name" class="col-lg-2 control-label">Item Loaner Address</label>
+        <h4 id="loaner"></h4>
+
+        <label for="name" class="col-lg-2 control-label">Contract Price</label>
+        <h4 id="price"></h4>
+
+        <label for="name" class="col-lg-2 control-label">Begin Day</label>
+        <h4 id="bday"></h4>
+
+        <label for="name" class="col-lg-2 control-label">End Day</label>
+        <h4 id="eday"></h4>
+
+        <label for="name" class="col-lg-2 control-label">Contract Status</label>
+        <h4 id="status"></h4>
+
+        <label for="name" class="col-lg-2 control-label">Access Code</label>
+        <h4 id="code"></h4>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+    <script>
+
+        if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+        } else {
+            // set the provider you want from Web3.providers
+            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        }
+        
+        var contractmanagerContract = web3.eth.contract([{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"generateAccessCode","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getLoanerAddr","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_owner_id","type":"address"},{"name":"_loaner_id","type":"address"},{"name":"_amount","type":"uint256"},{"name":"_beginDay","type":"uint256"},{"name":"_endDay","type":"uint256"}],"name":"newContract","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getBeginDay","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getStatus","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"id","type":"uint256"}],"name":"deactivate","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getAmount","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getOwnerAddr","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getCode","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"id","type":"uint256"}],"name":"activate","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getEndDay","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}]);
+
+        // Account in 'Run' tab in the Remix IDE
+        //web3.eth.defaultAccount = '0x182cf9eeb6c0bab3f1156a7e51a95df436c0f13c';
+        web3.eth.defaultAccount = web3.eth.accounts[1];
+
+        // get smart contract account/address from remix
+        var contractMgr = contractmanagerContract.at('0x4b5addae83b23ce17d54acd8b6a838512b769475');
+        
+        console.log(contractMgr);
+
+        // owner
+        contractMgr.getOwnerAddr(0, function(error, result){
+            if(!error) {
+                $("#owner1").html(result);
+                console.log(result);
+            }
+            else
+                console.error(error);
+        });
+
+        // loaner
+        contractMgr.getLoanerAddr(0, function(error, result){
+            if(!error) {
+                $("#loaner").html(result);
+                console.log(result);
+            }
+            else
+                console.error(error);
+        });
+
+        contractMgr.getAmount(0, function(error, result){
+            if(!error) {
+                $("#price").html(result.c[0]);
+                console.log(result);
+            }
+            else
+                console.error(error);
+        });
+
+        contractMgr.getBeginDay(0, function(error, result){
+            if(!error) {
+                $("#bday").html(result.c[0]);
+                console.log(result);
+            }
+            else
+                console.error(error);
+        });
+
+        contractMgr.getEndDay(0, function(error, result){
+            if(!error) {
+                $("#eday").html(result.c[0]);
+                console.log(result);
+            }
+            else
+                console.error(error);
+        });
+
+        contractMgr.getStatus(0, function(error, result){
+            if(!error) {
+                if(result == true) {
+                    $("#status").html("Contract is active");
+                }
+                else {
+                    $("#status").html("Contract is inactive");
+                }
+                console.log(result);
+            }
+            else
+                console.error(error);
+        });
+        
+        contractMgr.getCode(0, function(error, result){
+            if(!error) {
+                $("#code").html(result);
+                console.log(result);
+            }
+            else
+                console.error(error);
+        });
+
+        
+    </script>
+
+</body>
+</html>

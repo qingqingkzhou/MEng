@@ -11,15 +11,15 @@ import "./ContractManager.sol";
 // - Generate proposal
 // - Run vote process for available proposals
 // - Approve a proposal
-// - Generate contract and monitor its process
+// - Generate contract and monitor its process QQasdf
 //==============================================================
 
 contract SharedEco {
     
     // create ProposalManager and AccountManager instances
-    ProposalManager proposals;
-    AccountManager accounts;
-    ContractManager contracts;
+    ProposalManager proposals = new ProposalManager();
+    AccountManager accounts = new AccountManager();
+    ContractManager contracts = new ContractManager();
     
     // list the relationship between item and account id
     mapping(string => uint) item_owner;
@@ -45,14 +45,6 @@ contract SharedEco {
     uint owner_count = 0;
     uint loaner_count = 0;
     
-    
-    constructor() public {
-        // create ProposalManager and AccountManager instances
-        // proposals = new ProposalManager();
-        // accounts = new AccountManager();
-        // contracts = new ContractManager();
-    }
-    
     //========================================================================
     // Account Management 
     //========================================================================
@@ -60,15 +52,15 @@ contract SharedEco {
     // user may use this function to setup their account
     function joinAsProvider(string memory name,
                             string memory item,
-                            uint price) public {
+                            uint price) public payable {
                                 
         // create an owner account 
-        uint id = accounts.setOwner(name, item, price, msg.sender);
+        uint id = accounts.setOwner(name, item, price);
         item_owner[item] = id;
         owner_count++;
         
         // add sender to the whitelist
-        //proposals.add2whitelist(msg.sender);
+        proposals.add2whitelist(msg.sender);
     }
     
     // user may use this function to setup their account
@@ -81,7 +73,6 @@ contract SharedEco {
         loaner_count++;
     }
     
-    
     function getOwnerCount() public view returns (uint) {
        return owner_count;
     }
@@ -92,11 +83,21 @@ contract SharedEco {
     }
     
     
-    function getOwner(uint id) public view returns (uint, string memory, string memory, uint) {
+    function getOwner(uint id) public view returns (uint,
+                string memory,
+                address,
+                string memory,
+                uint,
+                bytes32) {
        return accounts.getOwner(id);
     }
     
-    function getLoaner(uint id) public view returns (uint, string memory, string memory, uint) {
+    function getLoaner(uint id) public view returns (uint,
+                string memory,
+                address,
+                string memory,
+                uint,
+                bytes32) {
        return accounts.getLoaner(id);
     }
     

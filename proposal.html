@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" type="text/css" href="main.css">
+
+    <script src="./node_modules/web3/dist/web3.min.js"></script>
+
+</head>
+<body>
+    <div class="container">
+
+        <h1>Smart Share</h1>
+
+        <h2>Proposal 1</h2>
+
+        <label for="name" class="col-lg-2 control-label">Creator Address</label>
+        <h4 id="creator"></h4>
+
+        <label for="name" class="col-lg-2 control-label">Recipient Address</label>
+        <h4 id="recipient"></h4>
+
+        <label for="name" class="col-lg-2 control-label">Description</label>
+        <h4 id="description"></h4>
+
+        <label for="name" class="col-lg-2 control-label">Item Price</label>
+        <h4 id="price"></h4>
+
+        <label for="name" class="col-lg-2 control-label">Deposit Amount</label>
+        <h4 id="amount"></h4>
+
+        <label for="name" class="col-lg-2 control-label">Begin Day</label>
+        <h4 id="bday"></h4>
+
+        <label for="name" class="col-lg-2 control-label">End Day</label>
+        <h4 id="eday"></h4>
+
+        <label for="name" class="col-lg-2 control-label">Voting Deadline</label>
+        <h4 id="vdeadline"></h4>
+
+        <label for="name" class="col-lg-2 control-label">Proposal Voting Status</label>
+        <h4 id="open"></h4>
+
+        <label for="name" class="col-lg-2 control-label">Proposal Verification Status</label>
+        <h4 id="status"></h4>
+
+        <label for="name" class="col-lg-2 control-label">Proposal Hash</label>
+        <h4 id="hash"></h4>
+
+        <label for="name" class="col-lg-2 control-label">Proposal Verification Status</label>
+        <h4 id="status"></h4>
+
+        <label for="name" class="col-lg-2 control-label"># of votes for approval</label>
+        <h4 id="yescount"></h4>
+
+        <label for="name" class="col-lg-2 control-label"># of votes for denial</label>
+        <h4 id="nocount"></h4>
+
+    </div>
+
+    <div class="container">
+
+        <h1>Vote</h1>
+
+        <label for="name" class="col-lg-2 control-label">Yes or No</label>
+        <input id="opt" type="text">
+
+        <button id="button">Vote Proposal</button>
+
+        <button id="button2">Verify Proposal</button>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+    <script>
+
+        if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+        } else {
+            // set the provider you want from Web3.providers
+            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        }
+        
+        var proposalmanagerContract = web3.eth.contract([{"constant":false,"inputs":[{"name":"id","type":"uint256"}],"name":"executeProposal","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getNocount","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getPassed","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"id","type":"uint256"}],"name":"verifyProposal","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getBeginDay","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"minVoteCount","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getYescount","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getDescription","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"allowedRecipients","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getRecipient","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getOpen","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"maxVoteNoCount","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getDeadline","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"proposalDeposit","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"id","type":"uint256"},{"name":"_recipient","type":"address"},{"name":"_amount","type":"uint256"},{"name":"_transactionData","type":"uint256"}],"name":"vote","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getAmount","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"id","type":"uint256"},{"name":"yesorno","type":"bool"}],"name":"simpleVote","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getDeposit","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getCreator","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_recipient","type":"address"}],"name":"add2whitelist","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_recipient","type":"address"},{"name":"_amount","type":"uint256"},{"name":"_description","type":"string"},{"name":"_transactionData","type":"uint256"},{"name":"_debatingPeriod","type":"uint64"},{"name":"_beginDay","type":"uint256"},{"name":"_endDay","type":"uint256"}],"name":"newProposal","outputs":[{"name":"","type":"uint256"}],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getEndDay","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"gethash","outputs":[{"name":"","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"}]);
+
+        // Account in 'Run' tab in the Remix IDE
+        //web3.eth.defaultAccount = '0x182cf9eeb6c0bab3f1156a7e51a95df436c0f13c';
+        web3.eth.defaultAccount = web3.eth.accounts[1];
+
+        // get smart contract account/address from remix
+        var proposalMgr = proposalmanagerContract.at('0xcc56b384c73ff1f3162401ee216dc6de466ff7e1');
+        
+        console.log(proposalMgr);
+
+        // creator
+        proposalMgr.getCreator(0, function(error, result){
+            if(!error) {
+                $("#creator").html(result);
+                console.log(result);
+            }
+            else
+                console.error(error);
+        });
+
+        // recipient
+        proposalMgr.getRecipient(0, function(error, result){
+            if(!error) {
+                $("#recipient").html(result);
+                console.log(result);
+            }
+            else
+                console.error(error);
+        });
+
+        // description
+        proposalMgr.getDescription(0, function(error, result){
+            if(!error) {
+                $("#description").html(result);
+                console.log(result);
+            }
+            else
+                console.error(error);
+        });
+
+        // item price
+        proposalMgr.getAmount(0, function(error, result){
+            if(!error) {
+                $("#price").html(result.c[0]);
+                console.log(JSON.stringify(result));
+            }
+            else
+                console.error(error);
+        });
+
+        // deposit amount
+        proposalMgr.getDeposit(0, function(error, result){
+            if(!error) {
+                $("#amount").html(result.c[0]);
+                console.log(result);
+            }
+            else
+                console.error(error);
+        });
+
+        // begin day
+        proposalMgr.getBeginDay(0, function(error, result){
+        if(!error) {
+            $("#bday").html(result.c[0]);
+            console.log(result);
+        }
+        else
+            console.error(error);
+        });
+
+        // end day
+        proposalMgr.getEndDay(0, function(error, result){
+        if(!error) {
+            $("#eday").html(result.c[0]);
+            console.log(result);
+        }
+        else
+            console.error(error);
+        });
+
+        // voting deadline
+        proposalMgr.getDeadline(0, function(error, result){
+        if(!error) {
+            $("#vdeadline").html(result.c[0]);
+            console.log(result[0]);
+        }
+        else
+            console.error(error);
+        });
+       
+        // voting status
+        proposalMgr.getOpen(0, function(error, result){
+        if(!error) {
+            if(result == true) {
+                $("#open").html("Proposal is open for voting");
+            }
+            else {
+                $("#open").html("Proposal is closed for voting");
+            }
+            console.log(result);
+        }
+        else
+            console.error(error);
+        });
+
+        // verification status
+        proposalMgr.getPassed(0, function(error, result){
+        if(!error) {
+            if(result == true) {
+                $("#status").html("Proposal has been approved");
+            }
+            else {
+                $("#status").html("Proposal has not yet been approved");
+            }
+            console.log(result);
+        }
+        else
+            console.error(error);
+        });
+
+        // proposal hash
+        proposalMgr.gethash(0, function(error, result){
+        if(!error) {
+            $("#hash").html(result);
+            console.log(result);
+        }
+        else
+            console.error(error);
+        });
+
+        // yes count
+        proposalMgr.getYescount(0, function(error, result){
+        if(!error) {
+            $("#yescount").html(result.c[0]);
+            console.log(result);
+        }
+        else
+            console.error(error);
+        });
+
+        // no count
+        proposalMgr.getNocount(0, function(error, result){
+        if(!error) {
+            $("#nocount").html(result.c[0]);
+            console.log(result);
+        }
+        else
+            console.error(error);
+        });
+
+        // process vote button
+        $("#button").click(function() {
+            console.log($("#opt").val().toLowerCase());
+
+            if($("#opt").val().toLowerCase() == 'yes') {
+                console.log("vote yes");
+                proposalMgr.simpleVote(0, true);
+            }
+            else {
+                console.log("vote no");
+                proposalMgr.simpleVote(0, false);
+            }
+        });
+        
+
+        // process verify button
+        $("#button2").click(function() {
+            proposalMgr.verifyProposal(0);
+        });
+
+        //function(){window.location.reload();}
+    </script>
+
+</body>
+</html>

@@ -18,7 +18,7 @@
 
         <h2 id="owner"></h2>
 
-        <label for="name" class="col-lg-2 control-label">Onwer Name</label>
+        <label for="name" class="col-lg-2 control-label">Account Name</label>
         <input id="name" type="text">
 
         <label for="name" class="col-lg-2 control-label">Shared Item</label>
@@ -27,7 +27,7 @@
         <label for="name" class="col-lg-2 control-label">Price</label>
         <input id="price" type="text">
 
-        <button id="button">Update Owner Info</button>
+        <button id="button">Update Account Info</button>
 
     </div>
 
@@ -42,29 +42,39 @@
             web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
         }
         
-        var SharedEcoContract = web3.eth.contract([{"constant":false,"inputs":[{"name":"name","type":"string"},{"name":"item","type":"string"},{"name":"price","type":"uint256"}],"name":"setLoaner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getOwner","outputs":[{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"owner_addr","type":"address"}],"name":"approveDeal","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getLoaner","outputs":[{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"name","type":"string"},{"name":"item","type":"string"},{"name":"price","type":"uint256"}],"name":"setOwner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}]);
+        //var testContract = web3.eth.contract([{"constant":true,"inputs":[{"name":"item","type":"string"},{"name":"number","type":"uint256"}],"name":"hashSeriesNumber","outputs":[{"name":"","type":"bytes32"}],"payable":false,"stateMutability":"pure","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_item","type":"string"},{"name":"_price","type":"uint256"}],"name":"setOwner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getOwnerCount","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"}]);
+        var accountmanagerContract = web3.eth.contract([{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getLoanerAddr","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"id","type":"uint256"}],"name":"removeOwner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"item","type":"string"},{"name":"number","type":"uint256"}],"name":"hashSeriesNumber","outputs":[{"name":"","type":"bytes32"}],"payable":false,"stateMutability":"pure","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getOwnerAddr","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getOwner","outputs":[{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"address"},{"name":"","type":"string"},{"name":"","type":"uint256"},{"name":"","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"name","type":"string"},{"name":"item","type":"string"},{"name":"price","type":"uint256"},{"name":"addr","type":"address"}],"name":"setLoaner","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getLoaner","outputs":[{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"address"},{"name":"","type":"string"},{"name":"","type":"uint256"},{"name":"","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"id","type":"uint256"}],"name":"removeLoaner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getLoanerCount","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_item","type":"string"},{"name":"_price","type":"uint256"}],"name":"setOwner","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getOwnerCount","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"}]);
 
         // Account in 'Run' tab in the Remix IDE
-        //web3.eth.defaultAccount = '0x29588377bd448a678aed751f5eb4116d6c4ac1d0';
-        web3.eth.defaultAccount = web3.eth.accounts[0];
+        //web3.eth.defaultAccount = '0x182cf9eeb6c0bab3f1156a7e51a95df436c0f13c';
+        web3.eth.defaultAccount = web3.eth.accounts[1];
 
         // get smart contract account/address from remix
-        var SharedEco = SharedEcoContract.at('0x53258ca8d7a49129947e0ee29bfaffcbdfc85cde');
-
-        console.log(SharedEco);
+        var AcctMgr = accountmanagerContract.at('0x9b0147da7ae2d48ab39393cad78600f8bd4a54ce');
+        
+        console.log(AcctMgr);
     
-        SharedEco.getOwner(function(error, result){
-            if(!error)
-                {
-                    $("#owner").html(result[0]+' is sharing item '+result[1]+' at $'+result[2]);
+        var acctstr = '';
+        var total = AcctMgr.getOwnerCount();
+
+        for (var id=0; id<total; id++) {
+            AcctMgr.getOwner(id, function(error, result){
+                if(!error) {
+                    acctstr += '['+result[0]+'] '+result[1]+' is sharing item '+result[2]+' at $'+result[3]+'<br>';
+                    $("#owner").html(acctstr);
                     console.log(result);
                 }
-            else
-                console.error(error);
-        });
-
+                else
+                    console.error(error);
+            });
+        }
+        
+        //web3.eth.defaultAccount = web3.eth.accounts[0];
         $("#button").click(function() {
-            SharedEco.setOwner($("#name").val(), $("#item").val(), $("#price").val());
+            console.log($("#name").val(), $("#item").val(), $("#price").val());
+            AcctMgr.setOwner($("#name").val(), $("#item").val(), $("#price").val());
+            
+            //AcctMgr.setOwner();
         });
 
     </script>

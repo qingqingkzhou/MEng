@@ -67,10 +67,37 @@ contract ContractManager {
         else {
             contract_table[index].active = false;
         }
+        contract_table[index].active = false;
         
         ++index;
         
         return index-1;
+    }
+    
+    function newSimpleContract(
+        address _owner_id,
+        uint _amount,
+        uint _beginDay,
+        uint _endDay
+    ) public returns (uint) {
+
+        // create contract contents
+        contract_table[index].owner = _owner_id;
+        //contract_table[index].loaner = _loaner_id;
+        contract_table[index].amount = _amount;
+        contract_table[index].beginDay = _beginDay;
+        contract_table[index].endDay = _endDay;
+        contract_table[index].code = string(generateAccessCode(index));
+        
+        contract_table[index].active = false;
+        
+        ++index;
+        
+        return index-1;
+    }
+    
+    function setLoanerAddr(uint id, address _loaner_id) public {
+        contract_table[id].loaner = _loaner_id;
     }
     
     // activate a contract
@@ -89,6 +116,42 @@ contract ContractManager {
     function getStatus(uint id) public view returns(bool) {
 
         return contract_table[id].active;
+    }
+    
+    // get owner address
+    function getOwnerAddr(uint id) public view returns(address) {
+
+        return contract_table[id].owner;
+    }
+    
+    // get loaner address
+    function getLoanerAddr(uint id) public view returns(address) {
+
+        return contract_table[id].loaner;
+    }
+    
+    // get amount involved in this contract
+    function getAmount(uint id) public view returns(uint) {
+
+        return contract_table[id].amount;
+    }
+    
+    // get begin day
+    function getBeginDay(uint id) public view returns(uint) {
+
+        return contract_table[id].beginDay;
+    }
+    
+    // get begin day
+    function getEndDay(uint id) public view returns(uint) {
+
+        return contract_table[id].endDay;
+    }
+    
+    // get access code
+    function getCode(uint id) public view returns(string memory) {
+
+        return contract_table[id].code;
     }
     
     function uint2str(uint256 _i) internal pure returns (string memory _uintAsString) {

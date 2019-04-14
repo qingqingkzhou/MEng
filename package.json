@@ -8,6 +8,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "http-server": "^0.11.1",
     "web3": "github:ethereum/web3.js"
   },
   "description": ""

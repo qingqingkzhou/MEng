@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" type="text/css" href="main.css">
+
+    <script src="./node_modules/web3/dist/web3.min.js"></script>
+
+</head>
+<body>
+    <div class="container">
+
+        <h1>Smart Share</h1>
+
+        <h2>Owner 1</h2>
+
+        <label for="name" class="col-lg-2 control-label">Account Name</label>
+        <h4 id="name"></h4>
+
+        <label for="name" class="col-lg-2 control-label">Account Address</label>
+        <h4 id="address"></h4>
+
+        <label for="name" class="col-lg-2 control-label">Shared Item</label>
+        <h4 id="item"></h4>
+
+        <label for="name" class="col-lg-2 control-label">Encoded Item</label>
+        <h4 id="itemen"></h4>
+
+        <label for="name" class="col-lg-2 control-label">Price</label>
+        <h4 id="price"></h4>
+
+        <br>
+        
+        <h2>Owner 2</h2>
+
+        <label for="name" class="col-lg-2 control-label">Account Name</label>
+        <h4 id="name2"></h4>
+
+        <label for="name" class="col-lg-2 control-label">Account Address</label>
+        <h4 id="address2"></h4>
+
+        <label for="name" class="col-lg-2 control-label">Shared Item</label>
+        <h4 id="item2"></h4>
+
+        <label for="name" class="col-lg-2 control-label">Encoded Item</label>
+        <h4 id="itemen2"></h4>
+
+        <label for="name" class="col-lg-2 control-label">Price</label>
+        <h4 id="price2"></h4>
+
+        <br>
+
+        <h2>Consumer 1</h2>
+
+        <label for="name" class="col-lg-2 control-label">Account Name</label>
+        <h4 id="name3"></h4>
+
+        <label for="name" class="col-lg-2 control-label">Account Address</label>
+        <h4 id="address3"></h4>
+
+        <label for="name" class="col-lg-2 control-label">Looking for</label>
+        <h4 id="item3"></h4>
+
+        <label for="name" class="col-lg-2 control-label">Encoded Item</label>
+        <h4 id="itemen3"></h4>
+
+        <label for="name" class="col-lg-2 control-label">Willing to pay</label>
+        <h4 id="price3"></h4>
+        <br>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+    <script>
+
+        if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+        } else {
+            // set the provider you want from Web3.providers
+            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        }
+        
+        var accountmanagerContract = web3.eth.contract([{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getLoanerAddr","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"id","type":"uint256"}],"name":"removeOwner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"item","type":"string"},{"name":"number","type":"uint256"}],"name":"hashSeriesNumber","outputs":[{"name":"","type":"bytes32"}],"payable":false,"stateMutability":"pure","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getOwnerAddr","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getOwner","outputs":[{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"address"},{"name":"","type":"string"},{"name":"","type":"uint256"},{"name":"","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"name","type":"string"},{"name":"item","type":"string"},{"name":"price","type":"uint256"},{"name":"addr","type":"address"}],"name":"setLoaner","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getLoaner","outputs":[{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"address"},{"name":"","type":"string"},{"name":"","type":"uint256"},{"name":"","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"id","type":"uint256"}],"name":"removeLoaner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getLoanerCount","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_item","type":"string"},{"name":"_price","type":"uint256"}],"name":"setOwner","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getOwnerCount","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"}]);
+
+        // Account in 'Run' tab in the Remix IDE
+        //web3.eth.defaultAccount = '0x182cf9eeb6c0bab3f1156a7e51a95df436c0f13c';
+        web3.eth.defaultAccount = web3.eth.accounts[1];
+
+        // get smart contract account/address from remix
+        var AcctMgr = accountmanagerContract.at('0xdfddea8b0dd7376fb56ed3cdf35a50900d9b5704');
+        
+        console.log(AcctMgr);
+
+        AcctMgr.getOwner(0, function(error, result){
+            if(!error) {
+                $("#name").html(result[1]);
+                $("#address").html(result[2]);
+                $("#item").html(result[3]);
+                $("#price").html(result[4].c[0]);
+                $("#itemen").html(result[5]);
+                console.log(result);
+            }
+            else
+                console.error(error);
+        });
+
+        AcctMgr.getOwner(1, function(error, result){
+            if(!error) {
+                $("#name2").html(result[1]);
+                $("#address2").html(result[2]);
+                $("#item2").html(result[3]);
+                $("#price2").html(result[4].c[0]);
+                $("#itemen2").html(result[5]);
+                console.log(result);
+            }
+            else
+                console.error(error);
+        });
+
+        AcctMgr.getLoaner(1, function(error, result){
+            if(!error) {
+                $("#name3").html(result[1]);
+                $("#address3").html(result[2]);
+                $("#item3").html(result[3]);
+                $("#price3").html(result[4].c[0]);
+                $("#itemen3").html(result[5]);
+                console.log(result);
+            }
+            else
+                console.error(error);
+        });
+
+    </script>
+
+</body>
+</html>
