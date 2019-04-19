@@ -40,13 +40,14 @@ contract AccountManager {
 
     function setOwner(string memory _name,
                       string memory _item,
-                      uint _price)
+                      uint _price,
+                      address _addr)
                       public returns (uint) {
-                          
+
         m_owner[index_owner].name  = _name;
         m_owner[index_owner].item  = _item;
         m_owner[index_owner].price = _price;
-        m_owner[index_owner].addr  = msg.sender;
+        m_owner[index_owner].addr  = _addr;
         m_owner[index_owner].itemhash = hashSeriesNumber(_item, seed);
         
         index_owner++;

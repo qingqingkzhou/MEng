@@ -19,7 +19,7 @@ contract ProposalManager {
     // The minimum deposit (in wei) required to submit any proposal
     uint public proposalDeposit = 2;
     // The minimum votes a proposal has to hold
-    uint public minVoteCount = 10;
+    uint public minVoteCount = 1;
     // The minimum votes a proposal has to hold
     uint public maxVoteNoCount = minVoteCount/10;
     
@@ -121,24 +121,24 @@ contract ProposalManager {
         address _recipient,
         uint _amount,
         uint _transactionData) public {
-        
-        if (proposals[id].votedYes[msg.sender]
-            || proposals[id].votedNo[msg.sender]
-            || (!proposals[id].open)) {
+
+        //if (proposals[id].votedYes[msg.sender]
+        //    || proposals[id].votedNo[msg.sender]
+        //    || (!proposals[id].open)) {
             // same voter cannot vote multiple timestamp
             return;
         }
         
         // verify hash
-        if (proposals[id].proposalHash ==
-            keccak256(abi.encodePacked(_recipient, _amount, _transactionData))) {
+        //if (proposals[id].proposalHash ==
+        //    keccak256(abi.encodePacked(_recipient, _amount, _transactionData))) {
             proposals[id].yes_count++;
             proposals[id].votedYes[msg.sender] = true;
-        }
-        else {
-            proposals[id].no_count++;
-            proposals[id].votedNo[msg.sender] = true;
-        }
+        //}
+        //else {
+        //    proposals[id].no_count++;
+        //    proposals[id].votedNo[msg.sender] = true;
+        //}
     }
     
     // vote for a proposal
