@@ -14,27 +14,104 @@
 <body>
     <div class="container">
 
-        <h1>Smart Share</h1>
+        <h1>Smart Share - Registeration</h1>
 
-        <h2 id="owner"></h2>
+        <br><br>
+        <h3 id="totaluser"></h3>
+        <br>
 
-        <label for="name" class="col-lg-2 control-label">Account Name</label>
-        <input id="name" type="text">
+        <label for="reg" class="col-lg-2 control-label">Register as</label>
+        <select id="usertype">
+            <option value="Owner">Item Owner</option>
+            <option value="Loaner">Item Loaner</option>
+        </select>
 
-        <label for="name" class="col-lg-2 control-label">Shared Item</label>
-        <input id="item" type="text">
+        <br><br>
+        <div id="owner">
+            <label for="name" class="col-lg-2 control-label">Owner Name</label>
+            <input class="name" type="text">
 
-        <label for="name" class="col-lg-2 control-label">Price</label>
-        <input id="price" type="text">
+            <label for="name" class="col-lg-2 control-label">Sharing Item</label>
+            <input class="item" type="text">
 
-        <button id="button">Update Account Info</button>
+            <label for="name" class="col-lg-2 control-label">Price</label>
+            <input class="price" type="text">
+
+            <button class="button">Add Owner Account</button>
+        </div>
+        
+        <div id="loaner">
+            <label for="name" class="col-lg-2 control-label">Loaner Name</label>
+            <input class="name" type="text">
+
+            <label for="name" class="col-lg-2 control-label">Interested Item</label>
+            <input class="item" type="text">
+
+            <label for="name" class="col-lg-2 control-label">Offering Price</label>
+            <input class="price" type="text">
+
+            <button class="button">Add Loaner Account</button>
+        </div>
+
+        <div id="login">
+            <label for="name" class="col-lg-2 control-label">User Name</label>
+            <input class="name" type="text">
+
+            <button class="button">Login</button>
+        </div>
+        
+        <div id="approve">
+            <button id="approvebutton">Approve Proposal</button>
+            <button id="rejectbutton">Reject Proposal</button>
+            <button id="startbutton">Start (simulate reaching the start date)</button>
+        </div>
+
+        <div id="viewproposal">
+            <button id="viewbutton">View Proposal</button>
+        </div>
+
+        <h3 id="userloggedin"></h3>
+        <div id="welcome">
+            <h3 id="accesscode"></h3>
+
+            <label for="name" class="col-lg-2 control-label">Looking for item</label>
+            <input id="orderitem" type="text">
+            <label for="name" class="col-lg-2 control-label">Willing to offer $</label>
+            <input id="orderprice" type="text">
+            <button id="search">Searching Item</button>
+            <h3 id="itemresult"></h3>
+        </div>
+        
+        <div id="cProposal">
+            <label for="name" class="col-lg-2 control-label">Start Day</label>
+            <input id="startday" type="text">
+            <label for="name" class="col-lg-2 control-label">Stop Day</label>
+            <input id="endday" type="text">
+            <button id="createPro">Create Proposal</button>
+        </div>
+
+        <div id="proposal">
+            <label for="name" class="col-lg-2 control-label">Owner</label>
+            <h4 id="proowner"></h4>
+            <label for="name" class="col-lg-2 control-label">Loaner</label>
+            <h4 id="proloaner"></h4>
+            <label for="name" class="col-lg-2 control-label">Item Hash</label>
+            <h4 id="proitem"></h4>
+            <label for="name" class="col-lg-2 control-label">Agreed Price</label>
+            <h4 id="proprice"></h4>
+            <label for="name" class="col-lg-2 control-label">Start Day</label>
+            <h4 id="probday"></h4>
+            <label for="name" class="col-lg-2 control-label">End Day</label>
+            <h4 id="proeday"></h4>
+            <label for="name" class="col-lg-2 control-label">Proposal Status</label>
+            <h4 id="prostatus"></h4>
+        </div>
 
     </div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 
     <script>
-
         if (typeof web3 !== 'undefined') {
             web3 = new Web3(web3.currentProvider);
         } else {
@@ -42,39 +119,308 @@
             web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
         }
         
-        //var testContract = web3.eth.contract([{"constant":true,"inputs":[{"name":"item","type":"string"},{"name":"number","type":"uint256"}],"name":"hashSeriesNumber","outputs":[{"name":"","type":"bytes32"}],"payable":false,"stateMutability":"pure","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_item","type":"string"},{"name":"_price","type":"uint256"}],"name":"setOwner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getOwnerCount","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"}]);
-        var accountmanagerContract = web3.eth.contract([{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getLoanerAddr","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"id","type":"uint256"}],"name":"removeOwner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"item","type":"string"},{"name":"number","type":"uint256"}],"name":"hashSeriesNumber","outputs":[{"name":"","type":"bytes32"}],"payable":false,"stateMutability":"pure","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getOwnerAddr","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getOwner","outputs":[{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"address"},{"name":"","type":"string"},{"name":"","type":"uint256"},{"name":"","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"name","type":"string"},{"name":"item","type":"string"},{"name":"price","type":"uint256"},{"name":"addr","type":"address"}],"name":"setLoaner","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"getLoaner","outputs":[{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"address"},{"name":"","type":"string"},{"name":"","type":"uint256"},{"name":"","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"id","type":"uint256"}],"name":"removeLoaner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getLoanerCount","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_item","type":"string"},{"name":"_price","type":"uint256"}],"name":"setOwner","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getOwnerCount","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"}]);
+        var smartsharedContract = web3.eth.contract([{"constant":false,"inputs":[{"name":"_approveOrReject","type":"bool"}],"name":"ownerApproveProposal","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_price","type":"uint256"}],"name":"getItemOwner","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getAccessCode","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"hasPendingProposal","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_user","type":"string"}],"name":"login","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_active","type":"bool"}],"name":"activateProposal","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getCurrentUser","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_bday","type":"uint256"},{"name":"_eday","type":"uint256"}],"name":"createProposal","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"item","type":"string"},{"name":"number","type":"uint256"}],"name":"hashSeriesNumber","outputs":[{"name":"","type":"bytes32"}],"payable":false,"stateMutability":"pure","type":"function"},{"constant":true,"inputs":[],"name":"getUserCount","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_item","type":"string"},{"name":"_price","type":"uint256"}],"name":"setAccountStep1","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getProposal","outputs":[{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"bytes32"},{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"bool"},{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"setProposalStatus","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"ownerOruser","type":"bool"}],"name":"setAccountStep2","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"generateAccessCode","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_item","type":"string"}],"name":"doesItemExist","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}]);
 
         // Account in 'Run' tab in the Remix IDE
         //web3.eth.defaultAccount = '0x182cf9eeb6c0bab3f1156a7e51a95df436c0f13c';
-        web3.eth.defaultAccount = web3.eth.accounts[1];
+        web3.eth.defaultAccount = web3.eth.accounts[0];
 
         // get smart contract account/address from remix
-        var AcctMgr = accountmanagerContract.at('0x9b0147da7ae2d48ab39393cad78600f8bd4a54ce');
+        var AcctMgr = smartsharedContract.at('0xe7f975b47ebd61a766a3baa920cae64485025b3d');
         
+        var currentusername = "";
+
+        // hide both forms
+        $("#welcome").hide();
+        $("#proposal").hide();
+        $("#cProposal").hide();
+        $("#approve").hide();
+        $("#viewproposal").hide();
+        if($("#usertype").val() == 'Owner') {
+            $("#loaner").hide();
+            $("#owner").show();
+        }
+        else {
+            $("#loaner").show();
+            $("#owner").hide();
+        }
+
         console.log(AcctMgr);
     
-        var acctstr = '';
-        var total = AcctMgr.getOwnerCount();
+        AcctMgr.getUserCount(function(error, result){
+            if(!error) {
+                $("#totaluser").html('Total accounts registered: ' + result);
+                console.log(result);
+            }
+            else
+                console.error(error);
+        });
 
-        for (var id=0; id<total; id++) {
-            AcctMgr.getOwner(id, function(error, result){
+        
+        $("#usertype").change(function() {
+            var strUser = $("#usertype").val();
+            if(strUser == 'Owner') {
+                $("#loaner").hide();
+                $("#owner").show();
+            }
+            else {
+                $("#loaner").show();
+                $("#owner").hide();
+            }
+        });
+
+        var count = 0;
+
+        //web3.eth.defaultAccount = web3.eth.accounts[0];
+        $("#owner .button").click(function() {
+            var strUser = $("#usertype").val();
+            console.log($("#owner .name").val(), $("#owner .item").val(), $("#owner .price").val(), strUser);
+
+            // owner address
+            web3.eth.defaultAccount = web3.eth.accounts[0+count];
+            if(++count >= 5) {
+                count = 0;
+            }
+
+            AcctMgr.setAccountStep1($("#owner .name").val(), $("#owner .item").val(), $("#owner .price").val());
+            AcctMgr.setAccountStep2(true);
+        });
+
+        $("#loaner .button").click(function() {
+            var strUser = $("#usertype").val();
+            console.log($("#loaner .name").val(), $("#loaner .item").val(), $("#loaner .price").val(), strUser);
+
+            // loaner address
+            web3.eth.defaultAccount = web3.eth.accounts[5+count];
+            if(++count >= 5) {
+                count = 0;
+            }
+
+            AcctMgr.setAccountStep1($("#loaner .name").val(), $("#loaner .item").val(), $("#loaner .price").val());
+            AcctMgr.setAccountStep2(false);
+        });
+
+        $("#login .button").click(function() {
+            $("#welcome").hide();
+
+            console.log($("#login .name").val());
+            AcctMgr.login($("#login .name").val());
+
+            AcctMgr.login($("#login .name").val());
+            AcctMgr.getCurrentUser(function(error, result){
                 if(!error) {
-                    acctstr += '['+result[0]+'] '+result[1]+' is sharing item '+result[2]+' at $'+result[3]+'<br>';
-                    $("#owner").html(acctstr);
                     console.log(result);
+                    if(result != "User not found") {
+                        $("#userloggedin").html('Welcome back ' + result);
+                        $("#welcome").show();
+                        $("#viewproposal").show();
+
+                        AcctMgr.generateAccessCode();
+
+                        // check if in the owner account and any active pending proposal
+                        AcctMgr.getAccessCode(function(error, result){
+                            if(!error) {
+                                console.log('access code: ' + result);
+                                if(result != "No Access Code Available") {
+                                    $("#accesscode").html('Access Code: ' + result);
+                                }
+                                else {
+                                    $("#accesscode").html(result);
+                                }
+                            }
+                        });
+
+                        // check if in the owner account and any active pending proposal
+                        AcctMgr.hasPendingProposal(function(error, result){
+                            if(!error) {
+                                console.log('any pending: ' + result);
+                                if(result == true) {
+                                    $("#approve").show();
+                                }
+                            }
+                            else
+                                console.error(error);
+                        });
+
+                    }
+                    else {
+                        $("#userloggedin").html('User not found');
+                    }
                 }
                 else
                     console.error(error);
             });
-        }
-        
-        //web3.eth.defaultAccount = web3.eth.accounts[0];
-        $("#button").click(function() {
-            console.log($("#name").val(), $("#item").val(), $("#price").val());
-            AcctMgr.setOwner($("#name").val(), $("#item").val(), $("#price").val());
+        });
+
+        $("#search").click(function() {
+            console.log($("#orderitem").val(), $("#orderprice").val());
             
-            //AcctMgr.setOwner();
+            AcctMgr.doesItemExist($("#orderitem").val());
+            AcctMgr.getItemOwner($("#orderprice").val(), function(error, result){
+                if(!error) {
+                    console.log(result);
+                    if(result == "No matching item found" ||
+                       result == "Found matching item! But price is higher than expected!") {
+                        $("#itemresult").html(result);
+                    }
+                    else {
+                        $("#itemresult").html('Item found and price within expectation! Item is offered by ' + result);
+                        $("#cProposal").show();    
+                    }
+                }
+                else
+                    console.error(error);
+            });
+        });
+
+        $("#createPro").click(function() {
+            
+            console.log($("#startday").val(), $("#endday").val());
+            
+            AcctMgr.createProposal($("#startday").val(), $("#endday").val());
+            AcctMgr.setProposalStatus();
+            AcctMgr.getProposal(function(error, result){
+                if(!error) {
+                    console.log(result);
+                    $("#proposal").show(); 
+
+                    $("#proowner").html(result[0]);
+                    $("#proloaner").html(result[1]);
+                    $("#proitem").html(result[2]);
+                    $("#proprice").html(result[3].c[0]);
+                    $("#probday").html(result[4].c[0]);
+                    $("#proeday").html(result[5].c[0]);
+                    if(result[6] == false) {
+                        $("#prostatus").html("Pending for approval");
+                    }
+                    else {
+                        $("#prostatus").html("Approved - Inactive");
+                    }
+                    if(result[7] == true) {
+                        $("#prostatus").html("Approved - Active");
+                    }
+                }
+                else
+                    console.error(error);
+            });
+        });
+
+        $("#approvebutton").click(function() {
+            
+            AcctMgr.ownerApproveProposal(true);
+
+            AcctMgr.getProposal(function(error, result){
+                if(!error) {
+                    console.log(result);
+                    $("#proposal").show(); 
+
+                    $("#proowner").html(result[0]);
+                    $("#proloaner").html(result[1]);
+                    $("#proitem").html(result[2]);
+                    $("#proprice").html(result[3].c[0]);
+                    $("#probday").html(result[4].c[0]);
+                    $("#proeday").html(result[5].c[0]);
+                    if(result[6] == false) {
+                        $("#prostatus").html("Pending for approval");
+                    }
+                    else {
+                        $("#prostatus").html("Approved - Inactive");
+                    }
+                    if(result[7] == true) {
+                        $("#prostatus").html("Approved - Active");
+                    }
+                }
+                else
+                    console.error(error);
+            });
+        });
+
+        $("#rejectbutton").click(function() {
+            
+            AcctMgr.ownerApproveProposal(false);
+
+            AcctMgr.getProposal(function(error, result){
+                if(!error) {
+                    console.log(result);
+                    $("#proposal").show(); 
+
+                    $("#proowner").html(result[0]);
+                    $("#proloaner").html(result[1]);
+                    $("#proitem").html(result[2]);
+                    $("#proprice").html(result[3].c[0]);
+                    $("#probday").html(result[4].c[0]);
+                    $("#proeday").html(result[5].c[0]);
+                    if(result[6] == false) {
+                        $("#prostatus").html("Pending for approval");
+                    }
+                    else {
+                        $("#prostatus").html("Approved - Inactive");
+                    }
+                    if(result[7] == true) {
+                        $("#prostatus").html("Approved - Active");
+                    }
+                }
+                else
+                    console.error(error);
+            });
+        });
+
+        $("#viewbutton").click(function() {
+            
+            AcctMgr.getProposal(function(error, result){
+                if(!error) {
+                    console.log(result);
+                    $("#proposal").show(); 
+
+                    $("#proowner").html(result[0]);
+                    $("#proloaner").html(result[1]);
+                    $("#proitem").html(result[2]);
+                    $("#proprice").html(result[3].c[0]);
+                    $("#probday").html(result[4].c[0]);
+                    $("#proeday").html(result[5].c[0]);
+                    if(result[6] == false) {
+                        $("#prostatus").html("Pending for approval");
+                    }
+                    else {
+                        $("#prostatus").html("Approved - Inactive");
+                    }
+                    if(result[7] == true) {
+                        $("#prostatus").html("Approved - Active");
+                    }
+                }
+                else
+                    console.error(error);
+            });
+        });
+
+        $("#startbutton").click(function() {
+            
+            AcctMgr.activateProposal(true);
+
+            AcctMgr.getProposal(function(error, result){
+                if(!error) {
+                    console.log(result);
+                    $("#proposal").show(); 
+
+                    $("#proowner").html(result[0]);
+                    $("#proloaner").html(result[1]);
+                    $("#proitem").html(result[2]);
+                    $("#proprice").html(result[3].c[0]);
+                    $("#probday").html(result[4].c[0]);
+                    $("#proeday").html(result[5].c[0]);
+                    if(result[6] == false) {
+                        $("#prostatus").html("Pending for approval");
+                    }
+                    else {
+                        $("#prostatus").html("Approved - Inactive");
+                    }
+                    if(result[7] == true) {
+                        $("#prostatus").html("Approved - Active");
+                    }
+                }
+                else
+                    console.error(error);
+            });
         });
 
     </script>
