@@ -19,7 +19,8 @@ A Smart Contract based solution that connects real-world with blockchain world i
 ## Setup
 
 **Standalone smart contract:**
-`SmartShare` solidity files can be run in [Remix Ethereum][ref1] by choosing "JavaScript VM" environment.
+- `SmartShare` solidity files can be run in [Remix Ethereum][ref1] by choosing "JavaScript VM" environment.
+- Follow the steps in [Demo Setup](/DemoSetup.md)
 
 **Run on server:**
 If running with a server as front end, use `testrpc` (follow the steps [here][ref2]) along with following html files to display the transactions and contents of contracts:
