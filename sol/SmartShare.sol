@@ -9,7 +9,7 @@ pragma solidity ^0.5.0;
 // - Generate contract and monitor its process
 //==============================================================
 
-contract SmartShared {
+contract SmartShare {
 
     struct AccountInfo {
         string name;
@@ -204,6 +204,7 @@ contract SmartShared {
             currentProposal.proposalPassed) {
                 currentProposal.active = _active;
                 pendingProposal = false;
+                generateAccessCode();
         }
     }
     
@@ -246,7 +247,7 @@ contract SmartShared {
     // get access code
     function getAccessCode() public view returns (string memory) {
         
-        if( currentProposal.active ||
+        if( currentProposal.active &&
             (
                 (keccak256(abi.encodePacked(m_users[loanerUser].name)) ==
                  keccak256(abi.encodePacked(m_users[currentUser].name))) || 

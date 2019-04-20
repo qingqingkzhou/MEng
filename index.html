@@ -126,7 +126,7 @@
         web3.eth.defaultAccount = web3.eth.accounts[0];
 
         // get smart contract account/address from remix
-        var AcctMgr = smartsharedContract.at('0xe7f975b47ebd61a766a3baa920cae64485025b3d');
+        var AcctMgr = smartsharedContract.at('0x0f6f700f446bf5bf1f9c9f38ad5e04f9d437c4a1');
         
         var currentusername = "";
 
@@ -215,7 +215,7 @@
                         $("#welcome").show();
                         $("#viewproposal").show();
 
-                        AcctMgr.generateAccessCode();
+                        //AcctMgr.generateAccessCode();
 
                         // check if in the owner account and any active pending proposal
                         AcctMgr.getAccessCode(function(error, result){
